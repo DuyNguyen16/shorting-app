@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "./components/Header";
 import MainScreen from "./components/MainScreen";
 import generateArray from './functions/generateArray';
 import bubbleSorting from "./functions/bubbleSorting";
+import selection from "./functions/selection";
 
 export const mainContext = React.createContext({});
 
@@ -18,6 +19,13 @@ const App = () => {
     const [randArray, setRandArray] = useState([]);
     const [random, setRandom] = useState(true);
     const [sort, setSort] = useState(false);
+    const [isActive, setIsActive] = useState(0);
+    const [speed, setSpeed] = useState(50);
+    const pausedRef = useRef(false);
+
+    const togglePause = () => {
+        pausedRef.current = !pausedRef.current; // Update ref
+    };
 
     useEffect(() => {
         setRandArray(generateArray(boxHeight, numsOfBars));
@@ -27,10 +35,19 @@ const App = () => {
     useEffect(() => {
         if (sort) {
             const sortArray = async () => {
-                await bubbleSorting([...randArray], setRandArray);
+                switch (algorithm) {
+                    case "bubble":
+                        await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed);
+                        break;
+                    case "selection":
+                        await selection([...randArray], setRandArray, setIsActive);
+                        break;
+                    default:
+                        console.log("");
+                        break;
+                }
                 setSort(false);
             };
-
             sortArray();
         }
     }, [sort]);
@@ -47,12 +64,18 @@ const App = () => {
         randArray,
         setRandArray,
         setRandom,
-        setSort
+        setSort,
+        isActive,
+        setIsActive,
+        paused: pausedRef.current,
+        togglePause,
+        speed, 
+        setSpeed,
     };
 
     return (
         <mainContext.Provider value={context}>
-            <main className="bg-stone-700">
+            <main className="bg-slate-300">
                 <Header />
                 <MainScreen />
             </main>
