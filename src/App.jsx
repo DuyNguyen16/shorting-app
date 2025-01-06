@@ -4,6 +4,7 @@ import MainScreen from "./components/MainScreen";
 import generateArray from './functions/generateArray';
 import bubbleSorting from "./functions/bubbleSorting";
 import selection from "./functions/selection";
+import insertion from "./functions/insertion";
 
 export const mainContext = React.createContext({});
 
@@ -51,12 +52,15 @@ const App = () => {
                 switch (algorithm) {
                     case "bubble":
                         setSmallest(-1)
-                        await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef);
+                        await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed, resetRef);
                         break;
                     case "selection":
-                        await selection([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef, setSmallest);
+                        await selection([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed, resetRef, setSmallest);
                         break;
                     case "insertion":
+                        await insertion([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed, resetRef, setSmallest);
+                        setSmallest(-1);
+                        break;
                     default:
                         console.log("");
                         break;
