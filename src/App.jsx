@@ -22,6 +22,7 @@ const App = () => {
     const [isActive, setIsActive] = useState(0);
     const [speed, setSpeed] = useState(60);
     const [reset, setReset] = useState(false);
+    const [smallest, setSmallest] = useState(0)
     const pausedRef = useRef(false);
     const resetRef = useRef(false);
 
@@ -30,12 +31,14 @@ const App = () => {
     };
 
     const handleReset = () => {
+        setSmallest(-1)
         resetRef.current = true;
         setReset(true);
         setRandom(true);
     }
 
     useEffect(() => {
+        setSmallest(-1)
         resetRef.current = true;
         setReset(true);
         setRandArray(generateArray(boxHeight, numsOfBars));
@@ -47,17 +50,18 @@ const App = () => {
             const sortArray = async () => {
                 switch (algorithm) {
                     case "bubble":
+                        setSmallest(-1)
                         await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef);
                         break;
                     case "selection":
-                        await selection([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef);
+                        await selection([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef, setSmallest);
                         break;
+                    case "insertion":
                     default:
                         console.log("");
                         break;
                 }
                 setSort(false);
-                
                 setIsActive(0);
                 pausedRef.current = false;
             };
@@ -88,6 +92,8 @@ const App = () => {
         reset, 
         setReset,
         handleReset,
+        smallest, 
+        setSmallest
     };
 
     return (
