@@ -1,6 +1,6 @@
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const selection = async (myArray, setRandArray, isActive) => {
+const selection = async (myArray, setRandArray, setIsActive, isPaused, speed, reset) => {
     let n = myArray.length;
 
     for (let i = 0; i < n; i++) {
@@ -8,13 +8,29 @@ const selection = async (myArray, setRandArray, isActive) => {
         let smallest = myArray[i]; // Assume the smallest element is at i
 
         for (let j = i + 1; j < n; j++) {
+            setIsActive(j);
+
+            // Wait for pause to resume
+            while (isPaused()) {
+                await delay(speed);
+                if (reset.current) {
+                    reset.current = false;
+                    return;
+                }
+            }
+
+            if (reset.current) {
+                reset.current = false;
+                return;
+            }
+
+            await delay(speed);
+            
             if (myArray[j] < smallest) {
                 smallest = myArray[j];
                 // Update index to the new smallest element
                 index = j;
             }
-            isActive(j)
-            await delay(50); // Delay for visual feedback
         }
 
         // Swap the current element with the smallest found

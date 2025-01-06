@@ -15,19 +15,29 @@ const App = () => {
     const BARWIDTH = 27;
     const numsOfBars = Math.floor((boxWidth / 1.1) / BARWIDTH);
 
-    const [algorithm, setAlgorithm] = useState('');
+    const [algorithm, setAlgorithm] = useState("bubble");
     const [randArray, setRandArray] = useState([]);
     const [random, setRandom] = useState(true);
     const [sort, setSort] = useState(false);
     const [isActive, setIsActive] = useState(0);
-    const [speed, setSpeed] = useState(50);
+    const [speed, setSpeed] = useState(60);
+    const [reset, setReset] = useState(false);
     const pausedRef = useRef(false);
+    const resetRef = useRef(false);
 
     const togglePause = () => {
-        pausedRef.current = !pausedRef.current; // Update ref
+        pausedRef.current = !pausedRef.current;
     };
 
+    const handleReset = () => {
+        resetRef.current = true;
+        setReset(true);
+        setRandom(true);
+    }
+
     useEffect(() => {
+        resetRef.current = true;
+        setReset(true);
         setRandArray(generateArray(boxHeight, numsOfBars));
         setRandom(false);
     }, [random]);
@@ -37,16 +47,19 @@ const App = () => {
             const sortArray = async () => {
                 switch (algorithm) {
                     case "bubble":
-                        await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed);
+                        await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef);
                         break;
                     case "selection":
-                        await selection([...randArray], setRandArray, setIsActive);
+                        await selection([...randArray], setRandArray, setIsActive, () => pausedRef.current, 80 - speed, resetRef);
                         break;
                     default:
                         console.log("");
                         break;
                 }
                 setSort(false);
+                
+                setIsActive(0);
+                pausedRef.current = false;
             };
             sortArray();
         }
@@ -65,12 +78,16 @@ const App = () => {
         setRandArray,
         setRandom,
         setSort,
+        sort,
         isActive,
         setIsActive,
         paused: pausedRef.current,
         togglePause,
         speed, 
         setSpeed,
+        reset, 
+        setReset,
+        handleReset,
     };
 
     return (
