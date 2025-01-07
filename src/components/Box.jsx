@@ -15,7 +15,7 @@ const Box = () => {
                 className="bg-[#f5f5dc] flex flex-wrap justify-between items-end"
             >
                 {c.randArray.map((bar, index) => {
-                    return <Bar height={bar} width={c.BARWIDTH} key={index} isActive={c.isActive == index ? true : false} />;
+                    return <Bar height={bar} width={c.BARWIDTH} key={index} isActive={c.isActive == index ? true : false} smallest={c.smallest == index ? true : false} />;
                 })}
             </div>
         </div>
