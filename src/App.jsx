@@ -5,6 +5,7 @@ import generateArray from './functions/generateArray';
 import bubbleSorting from "./functions/bubbleSorting";
 import selection from "./functions/selection";
 import insertion from "./functions/insertion";
+import mergeSorting from "./functions/mergeSorting";
 
 export const mainContext = React.createContext({});
 
@@ -51,7 +52,7 @@ const App = () => {
             const sortArray = async () => {
                 switch (algorithm) {
                     case "bubble":
-                        setSmallest(-1)
+                        setSmallest(-1);
                         await bubbleSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed, resetRef);
                         break;
                     case "selection":
@@ -61,8 +62,11 @@ const App = () => {
                         await insertion([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed, resetRef, setSmallest);
                         setSmallest(-1);
                         break;
+                    case "merge":
+                        await mergeSorting([...randArray], setRandArray, setIsActive, () => pausedRef.current, 100 - speed, resetRef);
+                        break;
                     default:
-                        console.log("");
+                        console.log("No sorting algorithm selected.");
                         break;
                 }
                 setSort(false);
@@ -72,6 +76,7 @@ const App = () => {
             sortArray();
         }
     }, [sort]);
+    
 
     const context = {
         algorithm,

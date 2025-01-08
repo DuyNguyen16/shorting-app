@@ -38,6 +38,15 @@ const Header = () => {
                 >
                     Insertion
                 </button>
+                <button
+                    disabled={c.sort}
+                    onClick={() => c.setAlgorithm("merge")}
+                    className={`${
+                        c.algorithm == "merge" ? "text-yellow-400" : ""
+                    }`}
+                >
+                    Merge
+                </button>
             </ul>
             <div className="gap-2 flex">
                 <button className="bg-red-500 px-4 py-2 rounded text-white hover:bg-red-600 transition" onClick={() => c.handleReset()}>
