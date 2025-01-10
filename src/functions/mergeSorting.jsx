@@ -1,5 +1,6 @@
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// need to be fix
 const merge = async (array, left, mid, right, setRandArray, speed, isPaused, reset) => {
     console.log("Merging: ", left, mid, right); // Debugging log
     
